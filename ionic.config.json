@@ -1,0 +1,7 @@
+{
+  "name": "todo-app-felipe",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular-standalone"
+}
