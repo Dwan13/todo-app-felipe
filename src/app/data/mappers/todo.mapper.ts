@@ -8,6 +8,7 @@ export class TodoMapper {
       title: todo.title,
       description: todo.description,
       completed: todo.completed,
+      createdAt: todo.createdAt,
     };
   }
 
@@ -17,6 +18,7 @@ export class TodoMapper {
       title: todoModel.title,
       description: todoModel.description,
       completed: todoModel.completed,
+      createdAt: todoModel.createdAt,
     };
   }
 }
