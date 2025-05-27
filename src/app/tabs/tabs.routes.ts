@@ -6,20 +6,19 @@ export const routes: Routes = [
     path: 'tabs',
     component: TabsPage,
     children: [
+
       {
         path: 'tab1',
-        loadComponent: () =>
-          import('../tab1/tab1.page').then((m) => m.Tab1Page),
+        loadComponent: () => import('../presentation/pages/todo/todo.page').then(m => m.TodoPage)
       },
       {
         path: 'tab2',
-        loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
+        loadComponent: () => import('../presentation/pages/search/search.page').then( m => m.SearchPage)
       },
       {
         path: 'tab3',
-        loadComponent: () =>
-          import('../tab3/tab3.page').then((m) => m.Tab3Page),
+        loadComponent: () => import('../presentation/pages/accesibility/accesibility.page').then( m => m.AccesibilityPage)
+
       },
       {
         path: '',

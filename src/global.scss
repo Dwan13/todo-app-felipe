@@ -8,6 +8,32 @@
  * For more information on global stylesheets, visit the documentation:
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
+body {
+    filter: brightness(var(--accessibility-brightness));
+}
+html {
+    transition: filter 0.3s ease;
+}
+
+.accessibility-bold-text {
+    font-weight: 600 !important;
+}
+
+.accessibility-true-tone {
+    filter: sepia(0.2) hue-rotate(-10deg) brightness(1.05);
+}
+
+.text-small {
+    font-size: 14px !important;
+}
+
+.text-medium {
+    font-size: 16px !important;
+}
+
+.text-large {
+    font-size: 18px !important;
+}
 
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
