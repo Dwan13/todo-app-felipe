@@ -1,89 +1,128 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// Importa los componentes individuales de Ionic desde '@ionic/angular/standalone'
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonCheckbox, IonLabel, IonInput, IonButton, IonIcon, IonTextarea } from '@ionic/angular/standalone';
+import { createOutline, trashOutline, checkmarkOutline, add } from 'ionicons/icons';
+import { IonHeader, IonToolbar, IonProgressBar, IonContent, IonList, IonItem, IonCheckbox, IonLabel, IonInput, IonButton, IonIcon, IonTextarea, IonCard, IonCardHeader, IonCardSubtitle, IonCardContent, IonRow, IonFab, IonFabButton } from '@ionic/angular/standalone';
 import { TodoService } from '../../services/todo.service';
 import { TodoViewModel } from '../../viewmodels/todo.viewmodel';
+import { addIcons } from 'ionicons';
+import { ModalController } from '@ionic/angular';
+import { EditTaskPage } from '../edit-task/edit-task.page';
+
+
+addIcons({ createOutline, trashOutline, checkmarkOutline, add });
 
 @Component({
-  selector: 'app-todo',
-  templateUrl: './todo.page.html',
-  styleUrls: ['./todo.page.scss'],
-  standalone: true,
-  imports: [
-    // Ya no necesitas IonicModule aquí si importas los componentes individualmente
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    // Lista los componentes de Ionic que usas en tu template
-    IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonCheckbox, IonLabel, IonInput, IonButton, IonIcon, IonTextarea
-  ]
+    selector: 'app-todo',
+    templateUrl: './todo.page.html',
+    styleUrls: ['./todo.page.scss'],
+    standalone: true,
+    providers: [ModalController],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        IonProgressBar,
+        IonHeader, IonToolbar, IonContent, IonList, IonItem, IonCheckbox, IonLabel, IonButton, IonIcon,
+        IonCard, IonCardHeader, IonCardSubtitle, IonCardContent, IonRow, IonFab, IonFabButton
+    ]
 })
 export class TodoPage implements OnInit {
-  newTodoTitle: string = '';
-  newTodoDescription: string = '';
-  todos: TodoViewModel[] = [];
+    newTodoTitle: string = '';
+    newTodoDescription: string = '';
+    todos: TodoViewModel[] = [];
 
-  constructor(private todoService: TodoService) { }
+    constructor(
+        private todoService: TodoService,
+        private modalController: ModalController
+    ) { }
 
-  ngOnInit() {
-    this.loadTodos();
-  }
-
-  async loadTodos() {
-    try {
-      const todos = await this.todoService.getAllTodos();
-      this.todos = todos;
-    } catch (error) {
-      console.error('Error loading todos:', error);
-      // Implementar manejo de errores en la UI
+    ngOnInit() {
+        this.loadTodos();
     }
-  }
 
-  async addTodo() {
-    if (this.newTodoTitle.trim().length === 0) {
-      return;
-    }
-    const newTodo: TodoViewModel = {
-      id: Date.now().toString(), // Generar un ID simple por ahora
-      title: this.newTodoTitle,
-      description: this.newTodoDescription,
-      completed: false,
-    };
-    try {
-      await this.todoService.addTodo(newTodo);
-      this.newTodoTitle = '';
-      this.newTodoDescription = '';
-      this.loadTodos(); // Recargar la lista de todos
-    } catch (error) {
-      console.error('Error adding todo:', error);
-      // Implementar manejo de errores en la UI
-    }
-  }
+    async loadTodos() {
+        try {
+            const todos = await this.todoService.getAllTodos();
+            this.todos = todos;
+            console.log('Loaded todos:', todos);
 
-  async updateTodo(todo: TodoViewModel) {
-    try {
-      await this.todoService.updateTodo(todo);
-      this.loadTodos(); // Recargar la lista de todos
-    } catch (error) {
-      console.error('Error updating todo:', error);
-      // Implementar manejo de errores en la UI
-    }
-  }
+        } catch (error) {
+            console.error('Error loading todos:', error);
 
-  async deleteTodo(id: string) {
-    try {
-      await this.todoService.deleteTodo(id);
-      this.loadTodos(); // Recargar la lista de todos
-    } catch (error) {
-      console.error('Error deleting todo:', error);
-      // Implementar manejo de errores en la UI
+        }
     }
-  }
 
-  toggleTodoCompletion(todo: TodoViewModel) {
-    todo.completed = !todo.completed;
-    this.updateTodo(todo);
-  }
+    async addTodo() {
+        const modal = await this.modalController.create({
+            component: EditTaskPage,
+
+        });
+        modal.onDidDismiss().then(async (result) => {
+            if (result.data && result.data.task) {
+
+                await this.todoService.addTodo(result.data.task);
+                this.loadTodos();
+            }
+        });
+        return await modal.present();
+    }
+
+    async updateTodo(todo: TodoViewModel) {
+        const modal = await this.modalController.create({
+            component: EditTaskPage,
+            componentProps: {
+                task: todo
+            },
+        });
+        modal.onDidDismiss().then(async (result) => {
+            if (result.data && result.data.task) {
+
+                await this.todoService.updateTodo(result.data.task);
+                this.loadTodos();
+            }
+        });
+        return await modal.present();
+    }
+
+    async deleteTodo(id: string) {
+        try {
+            await this.todoService.deleteTodo(id);
+            this.loadTodos();
+        } catch (error) {
+            console.error('Error deleting todo:', error);
+
+        }
+    }
+
+    async toggleTodoCompletion(todo: TodoViewModel) {
+        todo.completed = !todo.completed;
+        try {
+            await this.todoService.updateTodo(todo);
+            this.loadTodos();
+        } catch (error) {
+            console.error('Error updating todo:', error);
+        }
+
+    }
+
+    getTaskColor(todo: TodoViewModel): string {
+        if (!todo.createdAt) {
+            return 'task-neutral';
+        }
+    
+        const now = new Date();
+        const createdDate = new Date(todo.createdAt);
+        const ageInDays = Math.floor((now.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (todo.completed) {
+            return 'task-completed';
+        } else if (ageInDays > 7) {
+            return 'task-old';
+        } else if (ageInDays > 3) {
+            return 'task-medium';
+        } else {
+            return 'task-new';
+        }
+    }
 }

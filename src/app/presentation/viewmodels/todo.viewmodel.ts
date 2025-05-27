@@ -3,4 +3,5 @@ export interface TodoViewModel {
   title: string;
   description: string;
   completed: boolean;
+  createdAt?: Date;
 }
