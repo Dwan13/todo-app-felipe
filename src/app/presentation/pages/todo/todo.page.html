@@ -9,53 +9,16 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card *ngFor="let todo of todos" class="ion-margin {{ getTaskColor(todo) }}">
-    <ion-card-header>
-      <ion-card-subtitle>
-        {{ todo.completed ? 'Completada' : 'Pendiente' }}
-      </ion-card-subtitle>
-
-      <ion-item lines="none">
-        <ion-checkbox
-          slot="start"
-          [checked]="todo.completed"
-          (ionChange)="toggleTodoCompletion(todo)"
-          [color]="getTaskColor(todo)"
-        ></ion-checkbox>
-        <ion-label [class.completed]="todo.completed">
-          <h2>{{ todo.title }}</h2>
-          <p *ngIf="todo.description">{{ todo.description }}</p>
-          <p *ngIf="todo.createdAt">Created: {{ todo.createdAt | date:'shortDate' }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-card-header>
-
-    <ion-card-content>
-      <ion-label>Estado: {{ todo.completed ? 'Hecho' : 'Por hacer' }}</ion-label>
-      <ion-progress-bar [value]="todo.completed ? 1 : 0" color="primary"></ion-progress-bar>
-    </ion-card-content>
-
-    <ion-row class="ion-justify-content-end ion-padding-end">
-      <ion-button fill="clear" (click)="deleteTodo(todo.id)">
-        <ion-icon name="trash-outline"></ion-icon>
-        Eliminar
-      </ion-button>
-      <ion-button fill="clear" (click)="updateTodo(todo)">
-        <ion-icon name="create-outline"></ion-icon>
-        Actualizar
-      </ion-button>
-    </ion-row>
-  </ion-card>
+  <app-task-list
+    [todos]="todos"
+    (todoCompletionToggled)="toggleTodoCompletion($event)"
+    (todoDeleted)="deleteTodo($event)"
+    (todoUpdated)="updateTodo($event)"
+  ></app-task-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="addTodo()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
-  <ion-list *ngIf="todos.length === 0">
-    <ion-item>
-      <ion-label>No hay tareas. ¡Añade una!</ion-label>
-    </ion-item>
-  </ion-list>
 </ion-content>

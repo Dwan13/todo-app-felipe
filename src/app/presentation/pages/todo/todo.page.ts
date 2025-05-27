@@ -7,7 +7,8 @@ import { TodoService } from '../../services/todo.service';
 import { TodoViewModel } from '../../viewmodels/todo.viewmodel';
 import { addIcons } from 'ionicons';
 import { ModalController } from '@ionic/angular';
-import { EditTaskPage } from '../edit-task/edit-task.page';
+import { EditTaskPage } from '../../components/edit-task/edit-task.page';
+import { TaskListComponent } from '../../components/task-list/task-list.component';
 
 
 addIcons({ createOutline, trashOutline, checkmarkOutline, add });
@@ -22,9 +23,9 @@ addIcons({ createOutline, trashOutline, checkmarkOutline, add });
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        IonProgressBar,
-        IonHeader, IonToolbar, IonContent, IonList, IonItem, IonCheckbox, IonLabel, IonButton, IonIcon,
-        IonCard, IonCardHeader, IonCardSubtitle, IonCardContent, IonRow, IonFab, IonFabButton
+        IonHeader, IonToolbar, IonContent, IonItem, IonLabel, IonIcon,
+        IonFab, IonFabButton,
+        TaskListComponent
     ]
 })
 export class TodoPage implements OnInit {
@@ -106,23 +107,5 @@ export class TodoPage implements OnInit {
 
     }
 
-    getTaskColor(todo: TodoViewModel): string {
-        if (!todo.createdAt) {
-            return 'task-neutral';
-        }
     
-        const now = new Date();
-        const createdDate = new Date(todo.createdAt);
-        const ageInDays = Math.floor((now.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
-        
-        if (todo.completed) {
-            return 'task-completed';
-        } else if (ageInDays > 7) {
-            return 'task-old';
-        } else if (ageInDays > 3) {
-            return 'task-medium';
-        } else {
-            return 'task-new';
-        }
-    }
 }
