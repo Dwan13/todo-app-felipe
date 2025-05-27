@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Lista de Tareas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="add-todo-section">
+    <ion-item>
+      <ion-input
+        label="Nueva Tarea"
+        labelPlacement="floating"
+        [(ngModel)]="newTodoTitle"
+        placeholder="Título de la tarea"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-textarea
+        label="Descripción"
+        labelPlacement="floating"
+        [(ngModel)]="newTodoDescription"
+        placeholder="Descripción de la tarea (opcional)"
+        autoGrow="true"
+      ></ion-textarea>
+    </ion-item>
+    <ion-button expand="block" (click)="addTodo()">
+      <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+      Añadir Tarea
+    </ion-button>
+  </div>
+
+  <ion-list>
+    <ion-item *ngIf="todos.length === 0">
+      <ion-label>No hay tareas. ¡Añade una!</ion-label>
+    </ion-item>
+    <ion-item *ngFor="let todo of todos" class="todo-item">
+      <ion-checkbox
+        slot="start"
+        [checked]="todo.completed"
+        (ionChange)="toggleTodoCompletion(todo)"
+      ></ion-checkbox>
+      <ion-label [class.completed]="todo.completed">
+        <h2>{{ todo.title }}</h2>
+        <p *ngIf="todo.description">{{ todo.description }}</p>
+      </ion-label>
+      <ion-button
+        slot="end"
+        color="danger"
+        fill="clear"
+        (click)="deleteTodo(todo.id)"
+      >
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
