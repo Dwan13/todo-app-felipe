@@ -55,7 +55,7 @@ Define la interfaz de usuario y su lógica asociada.
 
 ## 🔁 Flujo de Interacción
 
-(![image](./diagram-flow.png)
+![image](./diagram-flow.png)
 
 1. **Usuario** interactúa con la vista (`TodoPage`).
 2. La **vista** llama a un método en el **ViewModel** (`addTodo()`).
