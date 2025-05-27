@@ -9,6 +9,7 @@ export class TodoMapper {
       description: todo.description,
       completed: todo.completed,
       createdAt: todo.createdAt,
+      updatedAt: todo.updatedAt,
     };
   }
 
@@ -19,6 +20,7 @@ export class TodoMapper {
       description: todoModel.description,
       completed: todoModel.completed,
       createdAt: todoModel.createdAt,
+      updatedAt: todoModel.updatedAt,
     };
   }
 }
