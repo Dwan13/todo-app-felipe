@@ -15,16 +15,89 @@
     --color-primary-light: #c8d6bf;
     --color-primary-lighter: #e3dfba;
 
-    --color-text-primary: #000000;
-    --color-text-secondary: #555555;
-
+    --color-text-primary: #000000; /* Negro para texto principal en modo claro */
+    --color-text-secondary: #555555; /* Gris oscuro para texto secundario en modo claro */
 
     --ion-color-primary: var(--color-primary-base);
     --ion-color-primary-rgb: 0, 102, 0;
     --ion-color-primary-contrast: #ffffff;
     --ion-color-primary-contrast-rgb: 255, 255, 255;
-    --ion-color-primary-shade: var(--color-primary-dark:);
+    --ion-color-primary-shade: var(--color-primary-dark);
     --ion-color-primary-tint: var(--color-primary-light);
+
+    /* Variables de texto para componentes Ionic en modo claro */
+    --ion-text-color: var(--color-text-primary); /* Color de texto global */
+    --ion-text-color-rgb: 0,0,0; /* RGB del color de texto global para cálculos de opacidad */
+
+    /* ion-item y ion-label */
+    --ion-item-color: var(--color-text-primary); /* Color del texto dentro de ion-item */
+    --ion-item-color-rgb: 0,0,0;
+    --ion-item-background: #ffffff; /* Fondo de los items en modo claro */
+    --ion-item-background-rgb: 255,255,255;
+
+    /* ion-list */
+    --ion-list-background: var(--ion-background-color); /* Fondo de las listas */
+    --ion-list-background-rgb: var(--ion-background-color-rgb);
+
+    /* ion-toolbar */
+    --ion-toolbar-background: #ffffff; /* Fondo del toolbar en modo claro */
+    --ion-toolbar-background-rgb: 255,255,255;
+    --ion-toolbar-color: var(--color-text-primary); /* Color del texto en el toolbar */
+    --ion-toolbar-color-rgb: 0,0,0;
+
+    /* ion-tab-bar */
+    --ion-tab-bar-background: #ffffff; /* Fondo de la barra de pestañas en modo claro */
+    --ion-tab-bar-background-rgb: 255,255,255;
+    --ion-tab-bar-color: var(--color-text-secondary); /* Color de las pestañas inactivas */
+    --ion-tab-bar-color-selected: var(--color-text-primary); /* Color de la pestaña activa */
+
+    /* ion-searchbar */
+    --ion-searchbar-background: #f2f2f2; /* Fondo de la barra de búsqueda */
+    --ion-searchbar-background-rgb: 242,242,242;
+    --ion-searchbar-input-background: #e0e0e0; /* Fondo del input de la barra de búsqueda */
+    --ion-searchbar-input-background-rgb: 224,224,224;
+    --ion-searchbar-input-color: var(--color-text-primary); /* Color del texto de entrada */
+    --ion-searchbar-input-color-rgb: 0,0,0;
+    --ion-searchbar-placeholder-color: var(--color-text-secondary); /* Color del placeholder */
+    --ion-searchbar-placeholder-color-rgb: 85,85,85;
+    --ion-searchbar-icon-color: var(--color-text-secondary); /* Color de los iconos (lupa, borrar) */
+    --ion-searchbar-icon-color-rgb: 85,85,85;
+
+    /* ion-header */
+    --ion-header-background: var(--ion-background-color); /* Fondo del encabezado */
+    --ion-header-background-rgb: var(--ion-background-color-rgb);
+    --ion-header-color: var(--color-text-primary); /* Color del texto en el encabezado */
+    --ion-header-color-rgb: 0,0,0;
+
+    /* ion-input, ion-textarea (color del texto de entrada) */
+    --ion-input-color: var(--color-text-primary);
+    --ion-textarea-color: var(--color-text-primary);
+
+    /* ion-select (color del texto seleccionado) */
+    --ion-select-text-color: var(--color-text-primary);
+
+    /* ion-toggle (color del texto de la etiqueta) */
+    --ion-toggle-handle-track-background: var(--color-text-secondary);
+    --ion-toggle-handle-track-background-checked: var(--color-primary-base);
+
+    --ion-color-medium: #92949c;
+    --ion-color-medium-rgb: 146,148,156;
+    --ion-color-medium-contrast: #000000;
+    --ion-color-medium-contrast-rgb: 0,0,0;
+    --ion-color-medium-shade: #808289;
+    --ion-color-medium-tint: #9d9fa6;
+
+    --ion-color-light: #f4f5f8;
+    --ion-color-light-rgb: 244,245,248;
+    --ion-color-light-contrast: #000000;
+    --ion-color-light-contrast-rgb: 0,0,0;
+    --ion-color-light-shade: #d7d8da;
+    --ion-color-light-tint: #f5f6f9;
+
+    --ion-background-color: #ffffff;
+    --ion-background-color-rgb: 255,255,255;
+
+    --ion-background-color-step-100: #f2f2f2; /* Un gris claro para pasos */
 }
 
 /* This sets a different background and item background for the default theme on ios */
@@ -121,7 +194,6 @@
 
     /* Ajuste de --ion-background-color-step-100 para modo oscuro */
     --ion-background-color-step-100: #262626; /* Puedes cambiar este valor al que desees */
-  
 
     /* ion-input, ion-textarea (color del texto de entrada) */
     --ion-input-color: var(--color-text-primary);
@@ -133,8 +205,6 @@
     /* ion-toggle (color del texto de la etiqueta) */
     --ion-toggle-handle-track-background: var(--color-text-secondary);
     --ion-toggle-handle-track-background-checked: var(--color-primary-base);
-
-
 
     --ion-color-medium: #92949c; /* Added for dark mode */
     --ion-color-medium-rgb: 146,148,156;
@@ -166,9 +236,6 @@
     --ion-searchbar-input-background: #333333;
     --ion-searchbar-text-color: #ffffff;
 
-    --ion-header-background: #1f1f1f;
-    --ion-header-text-color: #ffffff;
-
     --ion-item-background: #1f1f1f;
     --ion-item-text-color: #ffffff;
 
@@ -181,7 +248,7 @@
 
 
     --ion-background-color-step-100: #262626; /* Puedes cambiar este valor al que desees */
-  
+
 
     /* ion-input, ion-textarea (color del texto de entrada) */
     --ion-input-color: var(--color-text-primary);
