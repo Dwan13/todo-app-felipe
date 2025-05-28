@@ -46,8 +46,7 @@ Define la interfaz de usuario y su lógica asociada.
 - **Vistas**:  
   - `TodoPage` (`todo.page.html`, `todo.page.scss`): La UI que interactúa con el usuario.
 - **ViewModels**:  
-  - `TodoViewModel`: Expone datos y acciones para la vista. Controla el estado de la UI.
-  - `todo.viewmodel.mapper.ts`: Mapeo entre `Todo` y `TodoViewModel`.
+  - `SearchViewModel`: Expone datos y acciones para la vista. Controla el estado de la UI.
 - **Servicios de Presentación**:  
   - `TodoService`: Actúa como puente entre el ViewModel y los casos de uso.
 
