@@ -1,59 +1,50 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonList, IonItem, IonLabel } from '@ionic/angular/standalone';
-import { TodoService } from '../../services/todo.service';
+import { IonToggle, IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonItem, IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
 import { Todo } from '../../../domain/entities/todo.entity';
 import { TaskListComponent } from '../../components/task-list/task-list.component';
-import { AlertController } from '@ionic/angular';
 import { EditTaskPage } from '../../components/edit-task/edit-task.page';
 import { ModalController } from '@ionic/angular';
-
+import { SearchViewModel } from './search.viewmodel';
 @Component({
   selector: 'app-search',
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
   standalone: true,
-  providers: [ModalController],
-
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonList, IonItem, IonLabel, CommonModule, TaskListComponent],
+  providers: [ModalController, SearchViewModel],
+  imports: [IonToggle,  IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonItem, IonLabel, CommonModule, TaskListComponent, IonSegment, IonSegmentButton],
 })
 export class SearchPage implements OnInit {
-  searchResults: Todo[] = [];
-  allTodos: Todo[] = [];
-  searchTerm: string = '';
+  showFeature: boolean = false;
 
-  constructor(private todoService: TodoService,
-    private modalController: ModalController
-  ) { }
+  constructor(
+    private modalController: ModalController,
+    public searchViewModel: SearchViewModel) { }
 
-  async ngOnInit() {
-    this.allTodos = await this.todoService.getAllTodos();
+  ngOnInit() {
+    this.searchViewModel.showFeature$.subscribe(value => {
+      this.showFeature = value;
+    });
   }
 
-  async onSearchChange(event: any) {
-    this.searchTerm = event.detail.value.toLowerCase();
-    if (this.searchTerm && this.searchTerm.length > 0) {
-      this.searchResults = this.allTodos.filter(
-        (todo) =>
-          todo.title.toLowerCase().includes(this.searchTerm) ||
-          (todo.description && todo.description.toLowerCase().includes(this.searchTerm))
-      );
-    } else {
-      this.searchResults = [];
-    }
+  onSearchChange(event: any) {
+    this.searchViewModel.setSearchTerm(event.detail.value);
+  }
+
+  onSortChange(event: any) {
+    this.searchViewModel.setSortBy(event.detail.value);
+  }
+
+  onShowCompletedChange(event: any) {
+    this.searchViewModel.setShowCompletedFilter(event.detail.checked);
   }
 
   async toggleTodoCompletion(todo: Todo) {
-    const updatedTodo = { ...todo, completed: !todo.completed };
-    await this.todoService.updateTodo(updatedTodo);
-    this.allTodos = await this.todoService.getAllTodos(); // Refresh all todos
-    this.onSearchChange({ detail: { value: this.searchTerm } }); // Re-filter search results
+    await this.searchViewModel.toggleTodoCompletion(todo);
   }
 
   async deleteTodo(id: string) {
-    await this.todoService.deleteTodo(id);
-    this.allTodos = await this.todoService.getAllTodos(); // Refresh all todos
-    this.onSearchChange({ detail: { value: this.searchTerm } }); // Re-filter search results
+    await this.searchViewModel.deleteTodo(id);
   }
 
   async updateTodo(todo: Todo) {
@@ -65,23 +56,10 @@ export class SearchPage implements OnInit {
     });
     modal.onDidDismiss().then(async (result) => {
       if (result.data && result.data.task) {
-
-        await this.todoService.updateTodo(result.data.task);
-        this.loadTodos();
+        await this.searchViewModel.updateTodo(result.data.task);
       }
     });
     return await modal.present();
   }
 
-  async loadTodos() {
-    try {
-      const todos = await this.todoService.getAllTodos();
-      this.allTodos = todos;
-      console.log('Loaded todos:', todos);
-
-    } catch (error) {
-      console.error('Error loading todos:', error);
-
-    }
-  }
 }

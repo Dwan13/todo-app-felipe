@@ -8,28 +8,28 @@ export const routes: Routes = [
     children: [
 
       {
-        path: 'tab1',
+        path: 'home',
         loadComponent: () => import('../presentation/pages/todo/todo.page').then(m => m.TodoPage)
       },
       {
-        path: 'tab2',
+        path: 'search',
         loadComponent: () => import('../presentation/pages/search/search.page').then( m => m.SearchPage)
       },
       {
-        path: 'tab3',
+        path: 'accesibility',
         loadComponent: () => import('../presentation/pages/accesibility/accesibility.page').then( m => m.AccesibilityPage)
 
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/home',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/home',
     pathMatch: 'full',
   },
 ];

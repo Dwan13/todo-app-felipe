@@ -14,7 +14,11 @@ import {
   IonIcon,
   IonList,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { createOutline, trashOutline, checkmarkOutline } from 'ionicons/icons';
 import { Todo } from 'src/app/domain/entities/todo.entity';
+
+addIcons({ createOutline, trashOutline, checkmarkOutline });
 
 @Component({
   selector: 'app-task-list',
@@ -35,6 +39,7 @@ import { Todo } from 'src/app/domain/entities/todo.entity';
     IonButton,
     IonIcon,
     IonList,
+    
   ],
 })
 export class TaskListComponent {
