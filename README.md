@@ -136,6 +136,8 @@ src/
 - Node.js 18.x
 - Ionic CLI
 - Cordova CLI (`npm install -g cordova`)
+- Install Impactor http://www.cydiaimpactor.com
+- Install IPA on your device Apple
 
 ---
 
