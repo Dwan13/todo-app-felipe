@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add New Task</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item>
+      <ion-input label="Title" labelPlacement="floating" [(ngModel)]="currentTask.title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Description" labelPlacement="floating" [(ngModel)]="currentTask.description"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Due Date" labelPlacement="floating" type="date" [(ngModel)]="currentTask.createdAt"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="full" (click)="saveTask()">Add Task</ion-button>
+</ion-content>

@@ -37,6 +37,11 @@ export const routes: Routes = [
         loadComponent: () => import('../presentation/pages/accesibility/accesibility.page').then( m => m.AccesibilityPage)
 
       },
+      {
+        path: 'add',
+        loadComponent: () => import('../presentation/pages/add-task/add-task.page').then( m => m.AddTaskPage)
+
+      },
       /**
        * @route /tabs/
        * @description Redirección por defecto cuando se accede a `/tabs` sin una ruta hija específica.

@@ -1,7 +1,7 @@
 import { Component, EnvironmentInjector, inject } from '@angular/core';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { accessibilityOutline, search, layersOutline } from 'ionicons/icons';
+import { accessibilityOutline, search, layersOutline, addOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tabs',
@@ -32,6 +32,6 @@ export class TabsPage {
     // `layersOutline` para la pestaña de tareas (Todo).
     // `accessibilityOutline` para la pestaña de accesibilidad.
     // `search` para la pestaña de búsqueda.
-    addIcons({ layersOutline, accessibilityOutline, search });
+    addIcons({ layersOutline, accessibilityOutline, search, addOutline });
   }
 }
