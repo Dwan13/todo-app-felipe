@@ -42,14 +42,53 @@ addIcons({ createOutline, trashOutline, checkmarkOutline });
     
   ],
 })
+/**
+ * @component TaskListComponent
+ * @description Componente que muestra una lista de tareas (Todo).
+ *              Permite visualizar el estado de las tareas, marcarlas como completadas,
+ *              eliminarlas y actualizarlas.
+ */
 export class TaskListComponent {
+  /**
+   * @property todos
+   * @description Propiedad de entrada que recibe un array de objetos `Todo` para mostrar en la lista.
+   *              Se inicializa como un array vacío por defecto.
+   */
   @Input() todos: Todo[] = [];
+  /**
+   * @property todoCompletionToggled
+   * @description Emite un evento cuando el estado de completitud de una tarea es cambiado.
+   *              El evento lleva el objeto `Todo` que fue modificado.
+   */
   @Output() todoCompletionToggled = new EventEmitter<Todo>();
+  /**
+   * @property todoDeleted
+   * @description Emite un evento cuando una tarea es eliminada.
+   *              El evento lleva el `id` de la tarea eliminada.
+   */
   @Output() todoDeleted = new EventEmitter<string>();
+  /**
+   * @property todoUpdated
+   * @description Emite un evento cuando una tarea es solicitada para ser actualizada.
+   *              El evento lleva el objeto `Todo` que se desea actualizar.
+   */
   @Output() todoUpdated = new EventEmitter<Todo>();
 
+  /**
+   * @constructor
+   * @description Constructor del componente TaskListComponent.
+   */
   constructor() {}
 
+  /**
+   * @method getTaskColor
+   * @param todo El objeto `Todo` para el cual se determinará el color.
+   * @returns Una cadena de texto que representa la clase CSS para el color de la tarea
+   *          basado en su estado de completitud y antigüedad.
+   * @description Determina una clase CSS para aplicar un color a la tarjeta de la tarea.
+   *              Las tareas completadas tienen un color específico. Las tareas pendientes
+   *              cambian de color según su antigüedad (más de 7 días, más de 3 días, o nuevas).
+   */
  getTaskColor(todo: Todo): string {
         if (!todo.createdAt) {
             return 'task-neutral';
@@ -70,14 +109,32 @@ export class TaskListComponent {
         }
     }
 
+  /**
+   * @method toggleTodoCompletion
+   * @param todo El objeto `Todo` cuyo estado de completitud se va a alternar.
+   * @description Emite el evento `todoCompletionToggled` con la tarea proporcionada.
+   *              Esto permite que el componente padre maneje la lógica de actualización del estado.
+   */
   toggleTodoCompletion(todo: Todo) {
     this.todoCompletionToggled.emit(todo);
   }
 
+  /**
+   * @method deleteTodo
+   * @param id El `id` de la tarea a eliminar.
+   * @description Emite el evento `todoDeleted` con el `id` de la tarea proporcionada.
+   *              Esto permite que el componente padre maneje la lógica de eliminación.
+   */
   deleteTodo(id: string) {
     this.todoDeleted.emit(id);
   }
 
+  /**
+   * @method updateTodo
+   * @param todo El objeto `Todo` que se desea actualizar.
+   * @description Emite el evento `todoUpdated` con la tarea proporcionada.
+   *              Esto permite que el componente padre maneje la lógica de actualización.
+   */
   updateTodo(todo: Todo) {
     this.todoUpdated.emit(todo);
   }

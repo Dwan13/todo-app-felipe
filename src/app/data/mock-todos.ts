@@ -1,6 +1,11 @@
-import { TodoViewModel } from '../presentation/viewmodels/todo.viewmodel';
+import { Todo } from '../domain/entities/todo.entity';
 
-export const MOCK_TODOS: TodoViewModel[] = [
+/**
+ * Array de tareas de ejemplo (mock) para propósitos de desarrollo y prueba.
+ * Cada objeto en este array representa una tarea con sus propiedades básicas
+ * y está tipado como `Todo`.
+ */
+export const MOCK_TODOS: Todo[] = [
   {
     id: '1',
     title: 'Comprar víveres',

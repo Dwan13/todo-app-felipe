@@ -1,6 +1,11 @@
+<!-- Este archivo define la estructura HTML para la página principal de la lista de tareas (Todo List). -->
+
+<!-- Encabezado de la página con una barra de herramientas. -->
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <!-- Elemento de lista sin líneas para el título principal. -->
     <ion-item lines="none">
+      <!-- Etiqueta para mostrar el título "Todo List" con estilos específicos. -->
       <ion-label style="font-weight: 800;font-size: 3em;">
         Todo List
       </ion-label>
@@ -8,7 +13,11 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Contenido principal de la página. -->
 <ion-content [fullscreen]="true">
+  <!-- Componente personalizado para mostrar la lista de tareas. -->
+  <!-- Se le pasa la lista de tareas 'todos' como entrada. -->
+  <!-- Se manejan los eventos de cambio de estado, eliminación y actualización de tareas. -->
   <app-task-list
     [todos]="todos"
     (todoCompletionToggled)="toggleTodoCompletion($event)"
@@ -16,7 +25,10 @@
     (todoUpdated)="updateTodo($event)"
   ></app-task-list>
 
+  <!-- Botón de acción flotante en la parte inferior derecha. -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <!-- Botón dentro del FAB que llama a la función 'addTodo' al hacer clic. -->
+    <!-- Contiene un icono de "agregar". -->
     <ion-fab-button (click)="addTodo()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

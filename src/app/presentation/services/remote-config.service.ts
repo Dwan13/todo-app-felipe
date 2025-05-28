@@ -1,4 +1,6 @@
+// Importaciones necesarias de Angular para inyección de dependencias y contexto de ejecución.
 import { Injectable, EnvironmentInjector, runInInjectionContext } from '@angular/core';
+// Importaciones específicas de Firebase Remote Config.
 import {
   RemoteConfig,
   fetchAndActivate,
@@ -6,38 +8,41 @@ import {
   getValue,
 } from '@angular/fire/remote-config';
 
+// Decorador @Injectable que marca la clase como un servicio que puede ser inyectado.
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root', // Indica que el servicio se proporciona en el inyector raíz, haciéndolo disponible en toda la aplicación.
 })
 export class RemoteConfigService {
+  // Constructor del servicio, inyecta RemoteConfig y EnvironmentInjector.
   constructor(
-    private remoteConfig: RemoteConfig,
-    private injector: EnvironmentInjector
+    private remoteConfig: RemoteConfig, // Instancia del servicio Remote Config de Firebase.
+    private injector: EnvironmentInjector // Inyector de entorno para ejecutar código en un contexto de inyección específico.
   ) {}
 
   /**
    * Fetches and activates the latest Remote Config values within the Angular injection context.
-   * @returns A promise that resolves when the operation is complete.
+   * @returns A promise that resolves to a boolean indicating the status of 'show_new_feature'.
    */
   async fetchAndActivateConfig(): Promise<boolean> {
     try {
-      // Esperar un poco para asegurar contexto (opcional)
+      // Espera un breve período para asegurar que el contexto de inyección esté completamente establecido (opcional).
       await new Promise(res => setTimeout(res, 500));
 
-      // Ejecutar fetchAndActivate en el contexto de inyección Angular
+      // Ejecuta la función fetchAndActivate de Remote Config dentro del contexto de inyección de Angular.
       await runInInjectionContext(this.injector, () =>
         fetchAndActivate(this.remoteConfig)
       );
 
+      // Obtiene el valor booleano de la característica 'show_new_feature' del Remote Config.
       const showFeature = runInInjectionContext(this.injector, () =>
         getValue(this.remoteConfig, 'show_new_feature').asBoolean()
       );
 
-      return showFeature;
+      return showFeature; // Retorna el valor de la característica.
 
     } catch (err) {
-      console.error('🔥 Error fetching and activating Remote Config:', err);
-      return false; // En caso de error retorna false para feature flag
+      console.error('🔥 Error fetching and activating Remote Config:', err); // Registra un error si la operación falla.
+      return false; // En caso de error, retorna false para la característica.
     }
   }
 
@@ -77,10 +82,10 @@ export class RemoteConfigService {
    */
   getJson(key: string): any {
     try {
-      return JSON.parse(getValue(this.remoteConfig, key).asString());
+      return JSON.parse(getValue(this.remoteConfig, key).asString()); // Intenta parsear el valor como JSON.
     } catch (err) {
-      console.error('Error parsing JSON from Remote Config:', err);
-      return null;
+      console.error('Error parsing JSON from Remote Config:', err); // Registra un error si el parseo falla.
+      return null; // Retorna null en caso de error de parseo.
     }
   }
 }

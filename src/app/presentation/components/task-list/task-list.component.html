@@ -1,16 +1,29 @@
+<!--
+  Este archivo HTML define la plantilla para el componente TaskListComponent.
+  Muestra una lista de tareas, permitiendo a los usuarios ver su estado, editarlas y eliminarlas.
+-->
+
+<!--
+  Itera sobre cada tarea en la lista 'todos' y crea una tarjeta de Ionic para cada una.
+  La clase de la tarjeta se ajusta dinámicamente según el estado de la tarea (completada/pendiente).
+-->
 <ion-card *ngFor="let todo of todos" class="ion-margin {{ getTaskColor(todo) }}">
   <ion-card-header>
+    <!-- Subtítulo que indica si la tarea está completada o pendiente. -->
     <ion-card-subtitle>
       {{ todo.completed ? 'Completada' : 'Pendiente' }}
     </ion-card-subtitle>
 
+    <!-- Elemento de lista que contiene el checkbox y la información de la tarea. -->
     <ion-item lines="none">
+      <!-- Checkbox para marcar la tarea como completada o pendiente. -->
       <ion-checkbox
         slot="start"
         [checked]="todo.completed"
         (ionChange)="toggleTodoCompletion(todo)"
         [color]="getTaskColor(todo)"
       ></ion-checkbox>
+      <!-- Etiqueta que muestra el título, descripción y fecha de creación de la tarea. -->
       <ion-label [class.completed]="todo.completed">
         <h2>{{ todo.title }}</h2>
         <p *ngIf="todo.description">{{ todo.description }}</p>
@@ -20,15 +33,20 @@
   </ion-card-header>
 
   <ion-card-content>
+    <!-- Muestra el estado actual de la tarea (Hecho/Por hacer). -->
     <ion-label>Estado: {{ todo.completed ? 'Hecho' : 'Por hacer' }}</ion-label>
+    <!-- Barra de progreso que visualiza el estado de completitud de la tarea. -->
     <ion-progress-bar [value]="todo.completed ? 1 : 0" color="primary"></ion-progress-bar>
   </ion-card-content>
 
+  <!-- Fila de botones para acciones de la tarea (eliminar y actualizar). -->
   <ion-row class="ion-justify-content-end ion-padding-end">
+    <!-- Botón para eliminar la tarea. -->
     <ion-button fill="clear" (click)="deleteTodo(todo.id)">
       <ion-icon name="trash-outline"></ion-icon>
       Eliminar
     </ion-button>
+    <!-- Botón para actualizar la tarea. -->
     <ion-button fill="clear" (click)="updateTodo(todo)">
       <ion-icon name="create-outline"></ion-icon>
       Actualizar
@@ -36,6 +54,7 @@
   </ion-row>
 </ion-card>
 
+<!-- Mensaje que se muestra si no hay tareas en la lista. -->
 <ion-list *ngIf="todos.length === 0">
   <ion-item>
     <ion-label>No hay tareas. ¡Añade una!</ion-label>

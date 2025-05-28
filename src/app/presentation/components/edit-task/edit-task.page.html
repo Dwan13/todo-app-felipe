@@ -1,24 +1,43 @@
+<!--
+  Este archivo HTML define la interfaz de usuario para la página de edición de tareas.
+  Permite a los usuarios ver y modificar los detalles de una tarea existente.
+-->
 <ion-header>
+  <!--
+    La barra de herramientas superior de la página.
+    Contiene el título de la página y un botón para cancelar la edición.
+  -->
   <ion-toolbar>
+    <!-- Título de la página de administración de tareas. -->
     <ion-title>Admin Task</ion-title>
     <ion-buttons slot="end">
+      <!-- Botón para descartar (cerrar) el modal de edición sin guardar los cambios. -->
       <ion-button (click)="dismiss()">Cancel</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
+<!--
+  Contenido principal de la página de edición de tareas.
+  Contiene un formulario para editar los detalles de la tarea.
+-->
 <ion-content class="ion-padding">
+  <!-- Lista de elementos de formulario para la tarea. -->
   <ion-list>
+    <!-- Campo de entrada para el título de la tarea. -->
     <ion-item>
       <ion-input label="Title" labelPlacement="floating" [(ngModel)]="currentTask.title"></ion-input>
     </ion-item>
+    <!-- Campo de entrada para la descripción de la tarea. -->
     <ion-item>
       <ion-input label="Description" labelPlacement="floating" [(ngModel)]="currentTask.description"></ion-input>
     </ion-item>
+    <!-- Campo de entrada para la fecha de vencimiento de la tarea. -->
     <ion-item>
       <ion-input label="Due Date" labelPlacement="floating" type="date" [(ngModel)]="currentTask.createdAt"></ion-input>
     </ion-item>
   </ion-list>
 
+  <!-- Botón para guardar los cambios realizados en la tarea. -->
   <ion-button expand="full" (click)="saveTask()">Save</ion-button>
 </ion-content>

@@ -1,5 +1,11 @@
+<!--
+  Este archivo HTML define la estructura de la página de búsqueda de tareas.
+  Incluye una barra de búsqueda, opciones de filtrado y ordenación, y un componente
+  para mostrar la lista de tareas.
+-->
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <!-- Título de la página de búsqueda en la barra superior -->
     <ion-title>Search</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -7,18 +13,29 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
+      <!-- Título grande de la página de búsqueda que se condensa al hacer scroll -->
       <ion-title size="large">Search</ion-title>
     </ion-toolbar>
   </ion-header>
 
+  <!--
+    Barra de búsqueda para filtrar tareas.
+    El evento `ionInput` se dispara cuando el valor de la búsqueda cambia.
+  -->
   <ion-searchbar placeholder="Search tasks" (ionInput)="onSearchChange($event)"></ion-searchbar>
 
+  <!--
+    Contenedor de filtros que se muestra condicionalmente.
+    Incluye un toggle para mostrar tareas completadas y un segmento para ordenar.
+  -->
   <div *ngIf="showFeature" class="filters-container">
     <ion-item class="filter-item">
+      <!-- Toggle para filtrar tareas completadas -->
       <ion-toggle labelPlacement="start" (ionChange)="onShowCompletedChange($event)">Show Completed Tasks</ion-toggle>
     </ion-item>
 
     <ion-item class="filter-item">
+      <!-- Segmento para seleccionar el criterio de ordenación (Fecha o Título) -->
       <ion-segment (ionChange)="onSortChange($event)" value="createdAt" class="sort-segment">
         <ion-segment-button value="createdAt">
           <ion-label>Date</ion-label>
@@ -30,6 +47,11 @@
     </ion-item>
   </div>
 
+  <!--
+    Componente `app-task-list` para mostrar los resultados de la búsqueda.
+    Recibe la lista de tareas (`todos`) y emite eventos para la alternancia de completado,
+    eliminación y actualización de tareas.
+  -->
   <app-task-list
     [todos]="(searchViewModel.searchResults$ | async) || []"
     (todoCompletionToggled)="toggleTodoCompletion($event)"
