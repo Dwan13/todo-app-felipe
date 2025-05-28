@@ -1,5 +1,3 @@
-// ...existing code ...
-
 /**
  * @file main.ts
  * @description Este es el punto de entrada principal de la aplicación Angular.
