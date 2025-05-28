@@ -13,6 +13,9 @@ import { TodoService } from './app/presentation/services/todo.service';
 import { TodoDataSource } from './app/data/datasources/todo.datasource';
 import { LocalTodoDataSource } from './app/data/datasources/local-todo.datasource';
 
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
+
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 
@@ -38,6 +41,19 @@ bootstrapApplication(AppComponent, {
       provide: TodoDataSource,
       useClass: LocalTodoDataSource
     },
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideRemoteConfig(() => {
+      const remoteConfig = getRemoteConfig();
+      remoteConfig.settings = {
+        minimumFetchIntervalMillis: 3600000, // 1 hora
+        fetchTimeoutMillis: 60000,           // 60 segundos (valor común)
+      };
+      //remoteConfig.defaultConfig = rcDefaults;
+      remoteConfig.defaultConfig = {
+        show_new_feature: false,
+      };
+      return remoteConfig;
+    }),
     // Provide the use cases
     AddTodoUseCase,
     DeleteTodoUseCase,
