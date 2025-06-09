@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonToggle, IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonItem, IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
-import { Todo } from '../../../domain/entities/todo.entity';
+import { Task } from '../../../domain/entities/task.entity'; // Cambiado de Todo a Task
 import { TaskListComponent } from '../../components/task-list/task-list.component';
 import { EditTaskPage } from '../../components/edit-task/edit-task.page';
 import { ModalController } from '@ionic/angular';
-import { SearchViewModel } from './search.viewmodel';
+import { SearchViewModel } from '../../view-models/search.viewmodel'; // Ruta actualizada
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.page.html',
@@ -54,6 +55,7 @@ export class SearchPage implements OnInit {
     this.searchViewModel.setSearchTerm(event.detail.value);
   }
 
+
   /**
    * Maneja el evento de cambio en la opción de ordenación.
    * Actualiza el criterio de ordenación en el ViewModel.
@@ -74,34 +76,34 @@ export class SearchPage implements OnInit {
 
   /**
    * Alterna el estado de completado de una tarea.
-   * @param {Todo} todo - La tarea a la que se le alternará el estado de completado.
+   * @param {Task} task - La tarea a la que se le alternará el estado de completado.
    */
-  async toggleTodoCompletion(todo: Todo) {
-    await this.searchViewModel.toggleTodoCompletion(todo);
+  async toggleTaskCompletion(task: Task) { // Cambiado de Todo a Task
+    await this.searchViewModel.toggleTaskCompletion(task);
   }
 
   /**
    * Elimina una tarea por su ID.
    * @param {string} id - El ID de la tarea a eliminar.
    */
-  async deleteTodo(id: string) {
-    await this.searchViewModel.deleteTodo(id);
+  async deleteTask(id: string) {
+    await this.searchViewModel.deleteTask(id);
   }
 
   /**
    * Abre un modal para editar una tarea y actualiza la tarea si se guarda algún cambio.
-   * @param {Todo} todo - La tarea a editar.
+   * @param {Task} task - La tarea a editar. // Cambiado de Todo a Task
    */
-  async updateTodo(todo: Todo) {
+  async updateTask(task: Task) { // Cambiado de Todo a Task
     const modal = await this.modalController.create({
       component: EditTaskPage,
       componentProps: {
-        task: todo
+        task: task
       },
     });
     modal.onDidDismiss().then(async (result) => {
       if (result.data && result.data.task) {
-        await this.searchViewModel.updateTodo(result.data.task);
+        await this.searchViewModel.updateTask(result.data.task);
       }
     });
     return await modal.present();

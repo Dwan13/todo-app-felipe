@@ -16,7 +16,7 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { createOutline, trashOutline, checkmarkOutline } from 'ionicons/icons';
-import { Todo } from 'src/app/domain/entities/todo.entity';
+import { Task } from '../../../domain/entities/task.entity';
 
 addIcons({ createOutline, trashOutline, checkmarkOutline });
 
@@ -54,13 +54,13 @@ export class TaskListComponent {
    * @description Propiedad de entrada que recibe un array de objetos `Todo` para mostrar en la lista.
    *              Se inicializa como un array vacío por defecto.
    */
-  @Input() todos: Todo[] = [];
+  @Input() todos: Task[] = [];
   /**
    * @property todoCompletionToggled
    * @description Emite un evento cuando el estado de completitud de una tarea es cambiado.
    *              El evento lleva el objeto `Todo` que fue modificado.
    */
-  @Output() todoCompletionToggled = new EventEmitter<Todo>();
+  @Output() todoCompletionToggled = new EventEmitter<Task>();
   /**
    * @property todoDeleted
    * @description Emite un evento cuando una tarea es eliminada.
@@ -72,7 +72,7 @@ export class TaskListComponent {
    * @description Emite un evento cuando una tarea es solicitada para ser actualizada.
    *              El evento lleva el objeto `Todo` que se desea actualizar.
    */
-  @Output() todoUpdated = new EventEmitter<Todo>();
+  @Output() todoUpdated = new EventEmitter<Task>();
 
   /**
    * @constructor
@@ -89,7 +89,7 @@ export class TaskListComponent {
    *              Las tareas completadas tienen un color específico. Las tareas pendientes
    *              cambian de color según su antigüedad (más de 7 días, más de 3 días, o nuevas).
    */
- getTaskColor(todo: Todo): string {
+ getTaskColor(todo: Task): string {
         if (!todo.createdAt) {
             return 'task-neutral';
         }
@@ -115,7 +115,7 @@ export class TaskListComponent {
    * @description Emite el evento `todoCompletionToggled` con la tarea proporcionada.
    *              Esto permite que el componente padre maneje la lógica de actualización del estado.
    */
-  toggleTodoCompletion(todo: Todo) {
+  toggleTodoCompletion(todo: Task) {
     this.todoCompletionToggled.emit(todo);
   }
 
@@ -135,7 +135,7 @@ export class TaskListComponent {
    * @description Emite el evento `todoUpdated` con la tarea proporcionada.
    *              Esto permite que el componente padre maneje la lógica de actualización.
    */
-  updateTodo(todo: Todo) {
+  updateTodo(todo: Task) {
     this.todoUpdated.emit(todo);
   }
 }

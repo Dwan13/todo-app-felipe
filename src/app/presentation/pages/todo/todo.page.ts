@@ -1,136 +1,108 @@
-// Importaciones necesarias de Angular y Ionic.
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// Importación de iconos específicos de Ionic.
 import { createOutline, trashOutline, checkmarkOutline, add } from 'ionicons/icons';
-// Importación de componentes UI de Ionic.
-import { IonHeader, IonToolbar, IonContent, IonItem, IonLabel, IonIcon, IonFab, IonFabButton } from '@ionic/angular/standalone';
-// Importación de servicios y view models personalizados.
-import { TodoService } from '../../services/todo.service';
-// Utilidad para añadir iconos de Ionic.
+import { IonHeader, IonToolbar, IonButton, IonTitle, IonList, IonContent, IonItem, IonLabel, IonIcon, IonFab, IonFabButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-// Controlador de modales de Ionic.
 import { ModalController } from '@ionic/angular';
-// Componentes personalizados para la edición y lista de tareas.
 import { EditTaskPage } from '../../components/edit-task/edit-task.page';
 import { TaskListComponent } from '../../components/task-list/task-list.component';
-import { Todo } from 'src/app/domain/entities/todo.entity';
+import { Task } from 'src/app/domain/entities/task.entity'; // Cambiado de Todo a Task
+import { GetTasksUseCase } from 'src/app/domain/use-cases/get-tasks.use-case'; // Nuevo
+import { AddTaskUseCase } from 'src/app/domain/use-cases/add-task.use-case'; // Nuevo
+import { UpdateTaskUseCase } from 'src/app/domain/use-cases/update-task.use-case'; // Nuevo
+import { DeleteTaskUseCase } from 'src/app/domain/use-cases/delete-task.use-case'; // Nuevo
 
-
-// Añade los iconos importados para que estén disponibles en la aplicación.
 addIcons({ createOutline, trashOutline, checkmarkOutline, add });
 
-// Decorador @Component que define los metadatos del componente.
 @Component({
-    selector: 'app-todo', // Selector CSS para usar este componente.
-    templateUrl: './todo.page.html', // Ruta al archivo de plantilla HTML.
-    styleUrls: ['./todo.page.scss'], // Ruta a los archivos de estilos CSS/SCSS.
-    standalone: true, // Indica que este es un componente autónomo.
-    providers: [ModalController], // Provee ModalController a este componente.
-    imports: [ // Módulos y componentes que este componente utiliza.
+    selector: 'app-todo',
+    templateUrl: './todo.page.html',
+    styleUrls: ['./todo.page.scss'],
+    standalone: true,
+    providers: [ModalController, GetTasksUseCase, AddTaskUseCase, UpdateTaskUseCase, DeleteTaskUseCase], // Añadidos los casos de uso
+    imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        IonHeader, IonToolbar, IonContent, IonItem, IonLabel, IonIcon,
+        IonHeader, IonToolbar, IonContent, IonIcon, IonTitle, IonList,
         IonFab, IonFabButton,
         TaskListComponent
     ]
 })
-// Clase principal del componente TodoPage.
 export class TodoPage implements OnInit {
-    // Propiedades para el título y descripción de una nueva tarea.
     newTodoTitle: string = '';
     newTodoDescription: string = '';
-    // Array para almacenar las tareas, utilizando el Todo.
-    todos: Todo[] = [];
+    tasks: Task[] = []; // Cambiado de todos a tasks y de Todo[] a Task[]
 
-    // Constructor del componente, inyecta TodoService y ModalController.
     constructor(
-        private todoService: TodoService,
+        private getTasksUseCase: GetTasksUseCase, // Inyectado
+        private addTaskUseCase: AddTaskUseCase, // Inyectado
+        private updateTaskUseCase: UpdateTaskUseCase, // Inyectado
+        private deleteTaskUseCase: DeleteTaskUseCase, // Inyectado
         private modalController: ModalController
     ) { }
 
-    // Método del ciclo de vida de Angular, se ejecuta al inicializar el componente.
     ngOnInit() {
-        this.loadTodos(); // Carga las tareas al iniciar.
+        this.loadTasks(); // Cambiado de loadTodos a loadTasks
     }
 
-    // Método asíncrono para cargar todas las tareas desde el servicio.
-    async loadTodos() {
+    async loadTasks() { // Cambiado de loadTodos a loadTasks
         try {
-            const todos = await this.todoService.getAllTodos(); // Obtiene todas las tareas.
-            this.todos = todos; // Asigna las tareas a la propiedad 'todos'.
-            console.log('Loaded todos:', todos); // Muestra las tareas cargadas en consola.
-
+            this.getTasksUseCase.execute().subscribe(tasks => { // Usando GetTasksUseCase
+                this.tasks = tasks; // Cambiado de todos a tasks
+                console.log('Loaded tasks:', tasks); // Cambiado de todos a tasks
+            });
         } catch (error) {
-            console.error('Error loading todos:', error); // Manejo de errores al cargar tareas.
-
+            console.error('Error loading tasks:', error); // Cambiado de todos a tasks
         }
     }
 
-    // Método asíncrono para añadir una nueva tarea.
-    async addTodo() {
-        // Crea un modal para la página de edición de tareas.
+    async addTask() { // Cambiado de addTodo a addTask
         const modal = await this.modalController.create({
             component: EditTaskPage,
-
         });
-        // Maneja el evento de cierre del modal.
         modal.onDidDismiss().then(async (result) => {
-            // Si se devuelve data y una tarea, la añade y recarga la lista.
             if (result.data && result.data.task) {
-
-                await this.todoService.addTodo(result.data.task);
-                this.loadTodos();
+                await this.addTaskUseCase.execute(result.data.task); // Usando AddTaskUseCase
+                this.loadTasks(); // Cambiado de loadTodos a loadTasks
             }
         });
-        return await modal.present(); // Presenta el modal.
+        return await modal.present();
     }
 
-    // Método asíncrono para actualizar una tarea existente.
-    async updateTodo(todo: Todo) {
-        // Crea un modal para la página de edición de tareas, pasando la tarea a editar.
+    async updateTask(task: Task) { // Cambiado de updateTodo a updateTask y de Todo a Task
         const modal = await this.modalController.create({
             component: EditTaskPage,
             componentProps: {
-                task: todo
+                task: task
             },
         });
-        // Maneja el evento de cierre del modal.
         modal.onDidDismiss().then(async (result) => {
-            // Si se devuelve data y una tarea, la actualiza y recarga la lista.
             if (result.data && result.data.task) {
-
-                await this.todoService.updateTodo(result.data.task);
-                this.loadTodos();
+                await this.updateTaskUseCase.execute(result.data.task); // Usando UpdateTaskUseCase
+                this.loadTasks(); // Cambiado de loadTodos a loadTasks
             }
         });
-        return await modal.present(); // Presenta el modal.
+        return await modal.present();
     }
 
-    // Método asíncrono para eliminar una tarea por su ID.
-    async deleteTodo(id: string) {
+    async deleteTask(id: string) { // Cambiado de deleteTodo a deleteTask
         try {
-            await this.todoService.deleteTodo(id); // Elimina la tarea usando el servicio.
-            this.loadTodos(); // Recarga la lista de tareas.
+            await this.deleteTaskUseCase.execute(id); // Usando DeleteTaskUseCase
+            this.loadTasks(); // Cambiado de loadTodos a loadTasks
         } catch (error) {
-            console.error('Error deleting todo:', error); // Manejo de errores al eliminar.
-
+            console.error('Error deleting task:', error); // Cambiado de todo a task
         }
     }
 
-    // Método asíncrono para alternar el estado de completado de una tarea.
-    async toggleTodoCompletion(todo: Todo) {
-        todo.completed = !todo.completed; // Cambia el estado de completado.
+    async toggleTaskCompletion(task: Task) { // Cambiado de toggleTodoCompletion a toggleTaskCompletion y de Todo a Task
+        task.completed = !task.completed;
         try {
-            await this.todoService.updateTodo(todo); // Actualiza la tarea en el servicio.
-            this.loadTodos(); // Recarga la lista de tareas.
+            await this.updateTaskUseCase.execute(task); // Usando UpdateTaskUseCase
+            this.loadTasks(); // Cambiado de loadTodos a loadTasks
         } catch (error) {
-            console.error('Error updating todo:', error); // Manejo de errores al actualizar.
+            console.error('Error updating task:', error); // Cambiado de todo a task
         }
-
     }
-
-    
 }
