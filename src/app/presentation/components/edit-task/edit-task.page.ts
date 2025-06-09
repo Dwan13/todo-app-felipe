@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, ModalController, IonButtons, IonButton, IonList, IonItem, IonInput } from '@ionic/angular/standalone'; 
-import { TodoModel } from 'src/app/data/models/todo.model';
+import { Task } from '../../../domain/entities/task.entity';
 
 @Component({
   selector: 'app-edit-task',
@@ -22,13 +22,13 @@ export class EditTaskPage implements OnInit {
    * @property task
    * @description Propiedad de entrada que recibe la tarea a editar. Puede ser `undefined` si se está creando una nueva tarea.
    */
-  @Input() task: TodoModel | undefined;
+  @Input() task: Task | undefined;
   /**
    * @property currentTask
    * @description Objeto `TodoModel` que representa la tarea actual que se está editando o creando.
    *              Se inicializa en `ngOnInit`.
    */
-  currentTask!: TodoModel;
+  currentTask!: Task;
 
   /**
    * @constructor

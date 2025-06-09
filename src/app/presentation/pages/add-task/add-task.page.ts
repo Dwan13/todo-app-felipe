@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { TodoService } from 'src/app/presentation/services/todo.service';
-import { TodoModel } from 'src/app/data/models/todo.model';
+import { TaskFormViewModel } from '../../view-models/task-form.view-model';
 import { Router } from '@angular/router';
+import { Task } from '../../../domain/entities/task.entity';
 
 @Component({
   selector: 'app-add-task',
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class AddTaskPage implements OnInit {
-  currentTask: TodoModel = {
+  currentTask: Task = {
     id: '',
     title: '',
     description: '',
@@ -22,7 +22,7 @@ export class AddTaskPage implements OnInit {
     completed: false
   };
 
-  constructor(private todoService: TodoService, private router: Router) { }
+  constructor(private todoService: TaskFormViewModel, private router: Router) { }
 
   ngOnInit() {
     // Initialize a new task for the form
@@ -37,7 +37,7 @@ export class AddTaskPage implements OnInit {
 
   async saveTask() {
     if (this.currentTask.title && this.currentTask.description) {
-      await this.todoService.addTodo(this.currentTask);
+      await this.todoService.addTask(this.currentTask);
       this.router.navigate(['/tabs/home']); // Navigate back to the todo list after saving
     } else {
       // Optionally, add some user feedback for incomplete fields

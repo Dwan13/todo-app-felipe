@@ -54,8 +54,8 @@
   -->
   <app-task-list
     [todos]="(searchViewModel.searchResults$ | async) || []"
-    (todoCompletionToggled)="toggleTodoCompletion($event)"
-    (todoDeleted)="deleteTodo($event)"
-    (todoUpdated)="updateTodo($event)"
+    (todoCompletionToggled)="toggleTaskCompletion($event)"
+    (todoDeleted)="deleteTask($event)"
+    (todoUpdated)="updateTask($event)"
   ></app-task-list>
 </ion-content>
